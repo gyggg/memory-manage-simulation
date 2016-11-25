@@ -1,4 +1,4 @@
-package imu.memoryManage.app.model;
+package imu.memoryManage.model;
 
 /**
  * Created by Administrator on 2016/11/24.
