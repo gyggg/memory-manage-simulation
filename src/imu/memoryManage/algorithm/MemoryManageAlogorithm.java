@@ -4,6 +4,7 @@ import imu.memoryManage.model.AllocatedMemory;
 import imu.memoryManage.model.UnAllocatedMemory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -47,7 +48,7 @@ public class MemoryManageAlogorithm {
     }
 
 
-    public void firstFitAlgorithm(int length){
+    public void firstFitAlgorithm(int length,String processName){
         for(int i = 0;i<unAllocatedMemories.size();i++){
             if(unAllocatedMemories.get(i).getLength()>length){
                 UnAllocatedMemory oldUnAllocatedMemory = unAllocatedMemories.get(i);
@@ -56,7 +57,12 @@ public class MemoryManageAlogorithm {
                 unAllocatedMemories.remove(i);
                 newUnAllocatedMeMory.setLength((oldUnAllocatedMemory.getLength()-length));
                 newUnAllocatedMeMory.setStartAddress(oldUnAllocatedMemory.getStartAddress()+length);
-
+                unAllocatedMemories.set(i,newUnAllocatedMeMory);
+                allocatedMemory.setStartAddress(oldUnAllocatedMemory.getStartAddress());
+                allocatedMemory.setLength(length);
+                allocatedMemory.setProcessName(processName);
+                allocatedMemories.add(allocatedMemory);
+                Collections.sort(allocatedMemories);
             }
         }
 
