@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -29,22 +30,23 @@
       </TableView>
       <Label layoutX="319.0" layoutY="300.0" text="空闲分区表" />
       <Label layoutX="311.0" layoutY="642.0" text="已分配分区表" />
-      <TextField layoutX="994.0" layoutY="401.0" prefHeight="30.0" prefWidth="75.0" />
+      <TextField fx:id="initialMemoryText" layoutX="994.0" layoutY="401.0" prefHeight="30.0" prefWidth="75.0" />
       <Label layoutX="922.0" layoutY="406.0" text="初始内存" />
-      <Button layoutX="927.0" layoutY="604.0" mnemonicParsing="false" text="启动" />
+      <Button fx:id="startButton" layoutX="927.0" layoutY="604.0" mnemonicParsing="false" onMouseClicked="#onStartMemory" text="启动" />
       <TextField fx:id="progressNameText" layoutX="821.0" layoutY="131.0" />
       <Label layoutX="737.0" layoutY="136.0" text="进程名" />
       <Line endX="200.0" layoutX="929.0" layoutY="92.0" startX="-200.0" />
       <TextField fx:id="needMemoryText" layoutX="821.0" layoutY="195.0" />
       <Label layoutX="729.0" layoutY="200.0" text="所需内存" />
-      <Button fx:id="startProgressButton" layoutX="1049.0" layoutY="131.0" mnemonicParsing="false" text="启动进程" />
+      <Button fx:id="startProgressButton" layoutX="1049.0" layoutY="131.0" mnemonicParsing="false" onMouseClicked="#onStartProgress" text="启动进程" />
       <Line endX="200.0" layoutX="929.0" layoutY="261.0" startX="-200.0" />
-      <Button fx:id="releaseProgressButton" layoutX="1049.0" layoutY="195.0" mnemonicParsing="false" text="释放进程" />
-      <Pane layoutX="750.0" layoutY="280.0" prefHeight="500.0" prefWidth="125.0" style="-fx-background-color: #eeeeee;" />
-      <RadioButton layoutX="947.0" layoutY="464.0" mnemonicParsing="false" text="首次适应算法" />
-      <RadioButton layoutX="947.0" layoutY="543.0" mnemonicParsing="false" text="最坏适应算法" />
-      <RadioButton layoutX="947.0" layoutY="503.0" mnemonicParsing="false" text="最佳适应算法" />
-      <Button layoutX="1044.0" layoutY="604.0" mnemonicParsing="false" text="停止" />
+      <Button fx:id="releaseProgressButton" layoutX="1049.0" layoutY="195.0" mnemonicParsing="false" onMouseClicked="#onReleaseProgress" text="释放进程" />
+      <Pane fx:id="memoryPane" layoutX="750.0" layoutY="280.0" prefHeight="500.0" prefWidth="125.0" style="-fx-background-color: #eeeeee;" />
+      <RadioButton fx:id="firstAdapt" layoutX="947.0" layoutY="464.0" mnemonicParsing="false" onMouseClicked="#onAlgorithmSelect" text="首次适应算法" />
+      <RadioButton fx:id="baddestAdapt" layoutX="947.0" layoutY="543.0" mnemonicParsing="false" onMouseClicked="#onAlgorithmSelect" text="最坏适应算法" />
+      <RadioButton fx:id="bestAdapt" layoutX="947.0" layoutY="503.0" mnemonicParsing="false" onMouseClicked="#onAlgorithmSelect" text="最佳适应算法" />
+      <Button fx:id="overButton" layoutX="1044.0" layoutY="604.0" mnemonicParsing="false" onMouseClicked="#onOverMemory" text="停止" />
       <Label layoutX="1082.0" layoutY="406.0" text="KB" />
+      <Button layoutX="971.0" layoutY="686.0" mnemonicParsing="false" onMouseClicked="#onTest" text="testButton" />
    </children>
 </Pane>
