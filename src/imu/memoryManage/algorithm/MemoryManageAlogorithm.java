@@ -67,8 +67,12 @@ public class MemoryManageAlogorithm {
         }
     }
 
-    public void bestFitAlgorithm(){
+    public void bestFitAlgorithm(int length){
+        for(int i = 0;i<unAllocatedMemories.size();i++) {
+            if (unAllocatedMemories.get(i).getLength() > length) {
 
+            }
+        }
     }
 
 
