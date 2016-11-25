@@ -65,8 +65,12 @@ public class MemoryManageAlogorithm {
                 Collections.sort(allocatedMemories);
             }
         }
+    }
+
+    public void bestFitAlgorithm(){
 
     }
+
 
     public void compact(int lenget){
 
