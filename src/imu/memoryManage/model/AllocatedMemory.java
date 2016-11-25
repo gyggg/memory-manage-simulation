@@ -3,5 +3,45 @@ package imu.memoryManage.model;
 /**
  * Created by Administrator on 2016/11/24.
  */
-public class AllocatedMemory {
+public class AllocatedMemory implements Comparable{
+
+    private int length;
+    private int startAddress;
+    private String processName;
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public int getStartAddress() {
+        return startAddress;
+    }
+
+    public void setStartAddress(int startAddress) {
+        this.startAddress = startAddress;
+    }
+
+    public String getProcessName() {
+        return processName;
+    }
+
+    public void setProcessName(String processName) {
+        this.processName = processName;
+    }
+
+    @Override
+        public int compareTo(Object o) {
+            AllocatedMemory allocatedMemory = (AllocatedMemory)o;
+            if(allocatedMemory.length == this.length)
+                return 0;
+            else if(allocatedMemory.length>this.length)
+                return -1;
+            else
+                return 1;
+    }
+
 }
