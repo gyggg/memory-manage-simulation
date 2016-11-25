@@ -50,9 +50,20 @@ public class MemoryManageAlogorithm {
     public void firstFitAlgorithm(int length){
         for(int i = 0;i<unAllocatedMemories.size();i++){
             if(unAllocatedMemories.get(i).getLength()>length){
+                UnAllocatedMemory oldUnAllocatedMemory = unAllocatedMemories.get(i);
+                UnAllocatedMemory newUnAllocatedMeMory = new UnAllocatedMemory();
+                AllocatedMemory allocatedMemory = new AllocatedMemory();
+                unAllocatedMemories.remove(i);
+                newUnAllocatedMeMory.setLength((oldUnAllocatedMemory.getLength()-length));
+                newUnAllocatedMeMory.setStartAddress(oldUnAllocatedMemory.getStartAddress()+length);
 
             }
         }
+
+    }
+
+    public void compact(int lenget){
+
     }
 
 

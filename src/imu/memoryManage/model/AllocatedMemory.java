@@ -36,9 +36,9 @@ public class AllocatedMemory implements Comparable{
     @Override
         public int compareTo(Object o) {
             AllocatedMemory allocatedMemory = (AllocatedMemory)o;
-            if(allocatedMemory.length == this.length)
+            if(allocatedMemory.startAddress == this.startAddress)
                 return 0;
-            else if(allocatedMemory.length>this.length)
+            else if(allocatedMemory.startAddress>this.startAddress)
                 return -1;
             else
                 return 1;
