@@ -91,9 +91,30 @@ public class MemoryManageAlogorithm {
         return false;
     }
 
+    public boolean worstFitAlgorithm(int length,String processName) {
+        for(int i = 0;i<unAllocatedMemories.size();i++) {
+            if (unAllocatedMemories.get(i).getLength() > length) {
+                UnAllocatedMemory oldUnAllocatedMemory = unAllocatedMemories.get(i);
+                UnAllocatedMemory newUnAllocatedMeMory = new UnAllocatedMemory();
+                AllocatedMemory allocatedMemory = new AllocatedMemory();
+                unAllocatedMemories.remove(i);
+                newUnAllocatedMeMory.setLength((oldUnAllocatedMemory.getLength()-length));
+                newUnAllocatedMeMory.setStartAddress(oldUnAllocatedMemory.getStartAddress()+length);
+                unAllocatedMemories.set(i,newUnAllocatedMeMory);
+                allocatedMemory.setStartAddress(oldUnAllocatedMemory.getStartAddress());
+                allocatedMemory.setLength(length);
+                allocatedMemory.setProcessName(processName);
+                allocatedMemories.add(allocatedMemory);
+                Collections.sort(allocatedMemories);
+                Collections.sort(unAllocatedMemories);
+                Collections.reverse(unAllocatedMemories);
+                return  true;
+            }
+        }
+        return false;
+    }
 
-
-    public void compact(int lenget){
+    public void compact(int length){
         for(int i = 0;i<unAllocatedMemories.size();i++) {
 
 
