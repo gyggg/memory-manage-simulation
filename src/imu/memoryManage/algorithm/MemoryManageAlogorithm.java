@@ -63,11 +63,13 @@ public class MemoryManageAlogorithm {
                 allocatedMemory.setProcessName(processName);
                 allocatedMemories.add(allocatedMemory);
                 Collections.sort(allocatedMemories);
+                return true;
             }
         }
+        return false;
     }
 
-    public void bestFitAlgorithm(int length,String processName){
+    public boolean bestFitAlgorithm(int length,String processName){
         for(int i = 0;i<unAllocatedMemories.size();i++) {
             if (unAllocatedMemories.get(i).getLength() > length) {
                 UnAllocatedMemory oldUnAllocatedMemory = unAllocatedMemories.get(i);
@@ -83,8 +85,10 @@ public class MemoryManageAlogorithm {
                 allocatedMemories.add(allocatedMemory);
                 Collections.sort(allocatedMemories);
                 Collections.sort(unAllocatedMemories);
+                return  true;
             }
         }
+        return false;
     }
 
 
@@ -129,10 +133,32 @@ public class MemoryManageAlogorithm {
         if(arithmeticName=="最坏"){
             Collections.reverse(unAllocatedMemories);
         }
+        return false;
+    }
+
+    public boolean compact(int length){
+        int number = 0;
+        for(int i = 0;i<unAllocatedMemories.size();i++) {
+            number = number + unAllocatedMemories.get(i).getLength();
+        }
+        if(number<length)
+            return false;
+        else {
+            for(int i = unAllocatedMemories.size();i > 0;i--) {
+                UnAllocatedMemory unAllocatedMemory = unAllocatedMemories.get(i);
 
 
 
-}
+
+
+
+
+            }
+            return true;
+        }
+    }
+
+
 
 
 
