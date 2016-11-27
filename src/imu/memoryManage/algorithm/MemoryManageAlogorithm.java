@@ -114,10 +114,25 @@ public class MemoryManageAlogorithm {
         return false;
     }
 
-    public void compact(int length){
+    public boolean compact(int length){
+        int number = 0;
         for(int i = 0;i<unAllocatedMemories.size();i++) {
+            number = number + unAllocatedMemories.get(i).getLength();
+        }
+        if(number<length)
+            return false;
+        else {
+            for(int i = unAllocatedMemories.size();i > 0;i--) {
+                UnAllocatedMemory unAllocatedMemory = unAllocatedMemories.get(i);
 
 
+
+
+
+
+
+            }
+            return true;
         }
     }
 
