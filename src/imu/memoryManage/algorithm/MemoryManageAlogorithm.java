@@ -103,6 +103,7 @@ public class MemoryManageAlogorithm {
                 allocatedMemories.remove(i);
             }
             break;
+
         }
         for (int j = 0; j < unAllocatedMemories.size(); j++) {
             if ((unAllocatedMemories.get(j).getStartAddress() + unAllocatedMemories.get(j).getLength() == allocatedMemory.getStartAddress()) || (allocatedMemory.getStartAddress() + allocatedMemory.getLength() == unAllocatedMemories.get(j).getStartAddress())) {
