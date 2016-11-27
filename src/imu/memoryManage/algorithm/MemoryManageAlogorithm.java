@@ -48,7 +48,7 @@ public class MemoryManageAlogorithm {
     }
 
 
-    public void firstFitAlgorithm(int length,String processName){
+    public boolean firstFitAlgorithm(int length,String processName){
         for(int i = 0;i<unAllocatedMemories.size();i++){
             if(unAllocatedMemories.get(i).getLength()>length){
                 UnAllocatedMemory oldUnAllocatedMemory = unAllocatedMemories.get(i);
@@ -93,10 +93,6 @@ public class MemoryManageAlogorithm {
 
 
 
-    public void compact(int lenget){
-
-    }
-
     public void Recycle(String procressName,String arithmeticName){
         int flag=0;
         AllocatedMemory allocatedMemory = new AllocatedMemory();
@@ -133,7 +129,7 @@ public class MemoryManageAlogorithm {
         if(arithmeticName=="最坏"){
             Collections.reverse(unAllocatedMemories);
         }
-        return false;
+
     }
 
     public boolean compact(int length){
