@@ -243,7 +243,7 @@ public class MemoryManageAlogorithm {
     }
 
     private int getLastIndex(UnAllocatedMemory unAllocatedMemory){
-        for(int i=allocatedMemories.size();i>0;i--){
+        for(int i=allocatedMemories.size()-1;i>0;i--){
             if(allocatedMemories.get(i).getLength()+allocatedMemories.get(i).getStartAddress()==
                     unAllocatedMemory.getStartAddress()){
                 return i;
@@ -268,7 +268,12 @@ public class MemoryManageAlogorithm {
                 unAllocatedMemories.remove(unAllocatedMemories.size()-1);
                 allocatedMemory.setStartAddress(unAllocatedMemories.get(unAllocatedMemories.size()-1).getStartAddress()+ unAllocatedMemories.get(unAllocatedMemories.size()-1).getLength());
                 allocatedMemories.remove(index);
-                allocatedMemories.set(index,allocatedMemory);
+                if(index==unAllocatedMemories.size()-1){
+                    allocatedMemories.add(allocatedMemory);
+                }else {
+                    allocatedMemories.set(index,allocatedMemory);
+                }
+
             }
             return true;
         }
