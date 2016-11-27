@@ -177,13 +177,14 @@ public class MemoryManageAlogorithm {
             return false;
         else {
             while (unAllocatedMemories.get(unAllocatedMemories.size()-1).getLength()<length) {
-               UnAllocatedMemory unAllocatedMemory =unAllocatedMemories.get(unAllocatedMemories.size()-1);
+                UnAllocatedMemory unAllocatedMemory = unAllocatedMemories.get(unAllocatedMemories.size()-1);
                 int index = getLastIndex(unAllocatedMemory);
-
-
-
-
-
+                AllocatedMemory allocatedMemory = allocatedMemories.get(index);
+                unAllocatedMemories.get(unAllocatedMemories.size()-2).setLength(unAllocatedMemories.get(unAllocatedMemories.size()-2).getLength()+ unAllocatedMemory.getLength());
+                unAllocatedMemories.remove(unAllocatedMemories.size()-1);
+                allocatedMemory.setStartAddress(unAllocatedMemories.get(unAllocatedMemories.size()-1).getStartAddress()+ unAllocatedMemories.get(unAllocatedMemories.size()-1).getLength());
+                allocatedMemories.remove(index);
+                allocatedMemories.set(index,allocatedMemory);
 
             }
             return true;
