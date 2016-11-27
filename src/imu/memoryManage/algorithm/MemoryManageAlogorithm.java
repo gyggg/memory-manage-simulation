@@ -48,7 +48,7 @@ public class MemoryManageAlogorithm {
     }
 
 
-    public void firstFitAlgorithm(int length,String processName){
+    public boolean firstFitAlgorithm(int length,String processName){
         for(int i = 0;i<unAllocatedMemories.size();i++){
             if(unAllocatedMemories.get(i).getLength()>length){
                 UnAllocatedMemory oldUnAllocatedMemory = unAllocatedMemories.get(i);
@@ -63,11 +63,13 @@ public class MemoryManageAlogorithm {
                 allocatedMemory.setProcessName(processName);
                 allocatedMemories.add(allocatedMemory);
                 Collections.sort(allocatedMemories);
+                return true;
             }
         }
+        return false;
     }
 
-    public void bestFitAlgorithm(int length,String processName){
+    public boolean bestFitAlgorithm(int length,String processName){
         for(int i = 0;i<unAllocatedMemories.size();i++) {
             if (unAllocatedMemories.get(i).getLength() > length) {
                 UnAllocatedMemory oldUnAllocatedMemory = unAllocatedMemories.get(i);
@@ -83,14 +85,19 @@ public class MemoryManageAlogorithm {
                 allocatedMemories.add(allocatedMemory);
                 Collections.sort(allocatedMemories);
                 Collections.sort(unAllocatedMemories);
+                return  true;
             }
         }
+        return false;
     }
 
 
 
     public void compact(int lenget){
+        for(int i = 0;i<unAllocatedMemories.size();i++) {
 
+
+        }
     }
 
 
