@@ -94,7 +94,9 @@ public class MemoryManageAlogorithm {
     }
 
     public void Recycle(String procressName,String arithmeticName){
+        int flag=0;
         AllocatedMemory allocatedMemory = new AllocatedMemory();
+        UnAllocatedMemory unAllocatedMemory=new UnAllocatedMemory();
         for (int i=0;i<allocatedMemories.size();i++) {
             if (allocatedMemories.get(i).getProcessName() == procressName) {
                 allocatedMemory = allocatedMemories.get(i);
@@ -104,6 +106,7 @@ public class MemoryManageAlogorithm {
         }
         for (int j = 0; j < unAllocatedMemories.size(); j++) {
             if ((unAllocatedMemories.get(j).getStartAddress() + unAllocatedMemories.get(j).getLength() == allocatedMemory.getStartAddress()) || (allocatedMemory.getStartAddress() + allocatedMemory.getLength() == unAllocatedMemories.get(j).getStartAddress())) {
+                flag=1;
                 if (unAllocatedMemories.get(j).getStartAddress() + unAllocatedMemories.get(j).getLength() == allocatedMemory.getStartAddress()) {
                     unAllocatedMemories.get(j).setLength(unAllocatedMemories.get(j).getLength() + allocatedMemory.getLength());
                         }
@@ -111,8 +114,13 @@ public class MemoryManageAlogorithm {
                     unAllocatedMemories.get(j).setLength(unAllocatedMemories.get(j).getLength() + allocatedMemory.getLength());
                     unAllocatedMemories.get(j).setStartAddress(allocatedMemory.getStartAddress());
                         }
+                break;
                     }
-            break;
+        }
+        if(flag==0){
+            unAllocatedMemory.setStartAddress(allocatedMemory.getStartAddress());
+            unAllocatedMemory.setLength(allocatedMemory.getLength());
+            unAllocatedMemories.add(unAllocatedMemory);
         }
         if(arithmeticName=="最好"){
             Collections.sort(unAllocatedMemories);
