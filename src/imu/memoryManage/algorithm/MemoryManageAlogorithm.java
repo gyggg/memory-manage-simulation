@@ -12,8 +12,10 @@ import java.util.List;
  */
 public class MemoryManageAlogorithm {
     int [] Memory;
+    int maxLength;
     private List<UnAllocatedMemory> unAllocatedMemories = new ArrayList<>();
     private List<AllocatedMemory> allocatedMemories = new ArrayList<>();
+
 
     public int[] getMemory() {
         return Memory;
@@ -45,6 +47,7 @@ public class MemoryManageAlogorithm {
         unAllocatedMemory.setLength(length);
         unAllocatedMemory.setStartAddress(0);
         unAllocatedMemories.add(unAllocatedMemory);
+        maxLength = length-1;
     }
 
 
@@ -91,7 +94,28 @@ public class MemoryManageAlogorithm {
         return false;
     }
 
-
+    public boolean worstFitAlgorithm(int length,String processName){
+        for(int i = 0;i<unAllocatedMemories.size();i++) {
+            if (unAllocatedMemories.get(i).getLength() > length) {
+                UnAllocatedMemory oldUnAllocatedMemory = unAllocatedMemories.get(i);
+                UnAllocatedMemory newUnAllocatedMeMory = new UnAllocatedMemory();
+                AllocatedMemory allocatedMemory = new AllocatedMemory();
+                unAllocatedMemories.remove(i);
+                newUnAllocatedMeMory.setLength((oldUnAllocatedMemory.getLength()-length));
+                newUnAllocatedMeMory.setStartAddress(oldUnAllocatedMemory.getStartAddress()+length);
+                unAllocatedMemories.set(i,newUnAllocatedMeMory);
+                allocatedMemory.setStartAddress(oldUnAllocatedMemory.getStartAddress());
+                allocatedMemory.setLength(length);
+                allocatedMemory.setProcessName(processName);
+                allocatedMemories.add(allocatedMemory);
+                Collections.sort(allocatedMemories);
+                Collections.sort(unAllocatedMemories);
+                Collections.reverse(unAllocatedMemories);
+                return  true;
+            }
+        }
+        return false;
+    }
 
     public void Recycle(String procressName,String arithmeticName){
         int flag=0;
@@ -132,6 +156,18 @@ public class MemoryManageAlogorithm {
 
     }
 
+    private int getLastIndex(UnAllocatedMemory unAllocatedMemory){
+        for(int i=allocatedMemories.size();i>0;i--){
+            if(allocatedMemories.get(i).getLength()+allocatedMemories.get(i).getStartAddress()==
+                    unAllocatedMemory.getStartAddress()){
+                return i;
+            }
+        }
+        return 0;
+    }
+
+
+
     public boolean compact(int length){
         int number = 0;
         for(int i = 0;i<unAllocatedMemories.size();i++) {
@@ -140,9 +176,9 @@ public class MemoryManageAlogorithm {
         if(number<length)
             return false;
         else {
-            for(int i = unAllocatedMemories.size();i > 0;i--) {
-                UnAllocatedMemory unAllocatedMemory = unAllocatedMemories.get(i);
-
+            while (unAllocatedMemories.get(unAllocatedMemories.size()-1).getLength()<length) {
+               UnAllocatedMemory unAllocatedMemory =unAllocatedMemories.get(unAllocatedMemories.size()-1);
+                int index = getLastIndex(unAllocatedMemory);
 
 
 
