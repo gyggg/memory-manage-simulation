@@ -93,7 +93,37 @@ public class MemoryManageAlogorithm {
 
     }
 
+    public void Recycle(String procressName,String arithmeticName){
+        AllocatedMemory allocatedMemory = new AllocatedMemory();
+        for (int i=0;i<allocatedMemories.size();i++) {
+            if (allocatedMemories.get(i).getProcessName() == procressName) {
+                allocatedMemory = allocatedMemories.get(i);
+                allocatedMemories.remove(i);
+            }
+            break;
+        }
+        for (int j = 0; j < unAllocatedMemories.size(); j++) {
+            if ((unAllocatedMemories.get(j).getStartAddress() + unAllocatedMemories.get(j).getLength() == allocatedMemory.getStartAddress()) || (allocatedMemory.getStartAddress() + allocatedMemory.getLength() == unAllocatedMemories.get(j).getStartAddress())) {
+                if (unAllocatedMemories.get(j).getStartAddress() + unAllocatedMemories.get(j).getLength() == allocatedMemory.getStartAddress()) {
+                    unAllocatedMemories.get(j).setLength(unAllocatedMemories.get(j).getLength() + allocatedMemory.getLength());
+                        }
+                if (allocatedMemory.getStartAddress() + allocatedMemory.getLength() == unAllocatedMemories.get(j).getStartAddress()) {
+                    unAllocatedMemories.get(j).setLength(unAllocatedMemories.get(j).getLength() + allocatedMemory.getLength());
+                    unAllocatedMemories.get(j).setStartAddress(allocatedMemory.getStartAddress());
+                        }
+                    }
+            break;
+        }
+        if(arithmeticName=="最好"){
+            Collections.sort(unAllocatedMemories);
+        }
+        if(arithmeticName=="最坏"){
+            Collections.reverse(unAllocatedMemories);
+        }
 
+
+
+}
 
 
 
