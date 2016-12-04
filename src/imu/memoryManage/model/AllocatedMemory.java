@@ -44,4 +44,12 @@ public class AllocatedMemory implements Comparable{
                 return 1;
     }
 
+    public BusyTableModel getBusyTalbeModel() {
+        BusyTableModel busyTableModel = new BusyTableModel();
+        busyTableModel.setInitialAddress(String.valueOf(startAddress));
+        busyTableModel.setProgressName(processName);
+        busyTableModel.setLength(String.valueOf(length));
+        return busyTableModel;
+    }
+
 }

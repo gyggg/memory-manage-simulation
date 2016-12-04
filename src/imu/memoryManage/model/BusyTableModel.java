@@ -68,4 +68,5 @@ public class BusyTableModel {
     public void setProgressName(String progressName) {
         this.progressName.set(progressName);
     }
+
 }

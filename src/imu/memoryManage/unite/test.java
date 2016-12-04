@@ -15,10 +15,6 @@ public class test {
         memoryManageAlogorithm.bestFitAlgorithm(30,"dd");
         memoryManageAlogorithm.bestFitAlgorithm(30,"ee");
         memoryManageAlogorithm.bestFitAlgorithm(50,"ff");
-        memoryManageAlogorithm.Recycle("aa","");
-        memoryManageAlogorithm.Recycle("cc","");
-        memoryManageAlogorithm.Recycle("ee","");
-        memoryManageAlogorithm.Recycle("ff","");
         memoryManageAlogorithm.compact(120);
     }
 }

@@ -1,5 +1,7 @@
 package imu.memoryManage.app;
 
+import imu.memoryManage.algorithm.MemoryManageAlogorithm;
+import imu.memoryManage.model.AllocatedMemory;
 import imu.memoryManage.model.BusyTableModel;
 import imu.memoryManage.model.FreeTableModel;
 import javafx.animation.AnimationTimer;
@@ -18,10 +20,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
 import java.net.URL;
-import java.util.Random;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class Controller implements Initializable{
     @FXML
@@ -55,6 +54,12 @@ public class Controller implements Initializable{
     ObservableList<BusyTableModel> busyTableModels = FXCollections.observableArrayList();
     ObservableList<FreeTableModel> freeTableModels = FXCollections.observableArrayList();
     ObservableList<Node> colorSpaces;
+    ArrayList<Node> colorList = new ArrayList<>();
+
+    MemoryManageAlogorithm memoryManageAlogorithm = new MemoryManageAlogorithm();
+
+    int algName = 0;
+    int memorySize = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -62,7 +67,7 @@ public class Controller implements Initializable{
         bestAdapt.setToggleGroup(algorithmGroup);
         baddestAdapt.setToggleGroup(algorithmGroup);
         overButton.setDisable(true);
-        //onOverMemory();
+        onOverMemory();
         //初始化空闲分区表
         ObservableList<TableColumn<FreeTableModel, String>> observableList = freeTable.getColumns();
         observableList.get(0).setCellValueFactory(new PropertyValueFactory("id"));
@@ -73,24 +78,73 @@ public class Controller implements Initializable{
         freeTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         //初始化已分配分区表
         ObservableList<TableColumn<BusyTableModel, String>> busyTableColumns = busyTable.getColumns();
-        observableList.get(0).setCellValueFactory(new PropertyValueFactory("id"));
-        observableList.get(1).setCellValueFactory(new PropertyValueFactory("initialAddress"));
-        observableList.get(2).setCellValueFactory(new PropertyValueFactory("length"));
-        observableList.get(3).setCellValueFactory(new PropertyValueFactory("progressName"));
+        busyTableColumns.get(0).setCellValueFactory(new PropertyValueFactory("id"));
+        busyTableColumns.get(1).setCellValueFactory(new PropertyValueFactory("initialAddress"));
+        busyTableColumns.get(2).setCellValueFactory(new PropertyValueFactory("length"));
+        busyTableColumns.get(3).setCellValueFactory(new PropertyValueFactory("progressName"));
         busyTable.setItems(busyTableModels);
         busyTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         firstAdapt.setSelected(true);
     }
 
     public void onStartProgress() {
-
+        String proName = progressNameText.getText();
+        int needMemory;
+        try {
+            needMemory = Integer.parseInt(needMemoryText.getText());
+        } catch(Exception e) {
+            showErrorInfo("内存必须是整数");
+            return;
+        }
+        boolean result = memoryManageAlogorithm.selectAlgorithm(needMemory, proName, algName);
+        if(result == true) {
+            refreshTalbe();
+        }
     }
 
     public void onReleaseProgress() {
+        String proName = progressNameText.getText();
+        int needMemory;
+        try {
+            needMemory = Integer.parseInt(needMemoryText.getText());
+        } catch(Exception e) {
+            showErrorInfo("内存必须是整数");
+            return;
+        }
+        memoryManageAlogorithm.recycle(proName, algName);
+        refreshTalbe();
+    }
 
+    public void refreshTalbe() {
+        freeTableModels.clear();
+        for(int i = 0; i < memoryManageAlogorithm.getUnAllocatedMemories().size(); i++){
+            FreeTableModel freeTableModel = memoryManageAlogorithm.getUnAllocatedMemories().get(i).getFreeTalbeModel();
+            freeTableModel.setId(String.valueOf(i + 1));
+            freeTableModels.add(freeTableModel);
+        }
+        busyTableModels.clear();
+        for(int i = 0; i < memoryManageAlogorithm.getAllocatedMemories().size(); i++) {
+            BusyTableModel busyTableModel = memoryManageAlogorithm.getAllocatedMemories().get(i).getBusyTalbeModel();
+            busyTableModel.setId(String.valueOf(i + 1));
+            busyTableModels.add(busyTableModel);
+        }
+        memoryPane.getChildren().clear();
+        for(int i = 0; i < memoryManageAlogorithm.getAllocatedMemories().size(); i++) {
+            AllocatedMemory allocatedMemory = memoryManageAlogorithm.getAllocatedMemories().get(i);
+            Node node = addColorSpace(allocatedMemory.getStartAddress(), allocatedMemory.getLength(), allocatedMemory.getProcessName() + ":", allocatedMemory.getLength() + "K");
+            colorList.add(node);
+        }
     }
 
     public void onStartMemory() {
+        try {
+            memoryManageAlogorithm.initMemory(Integer.parseInt(initialMemoryText.getText()));
+            memorySize = memoryManageAlogorithm.getMaxLength();
+            refreshTalbe();
+        } catch (Exception e) {
+            showErrorInfo("初始内存必须是整数");
+            return;
+        }
         initialMemoryText.setDisable(true);
         firstAdapt.setDisable(true);
         bestAdapt.setDisable(true);
@@ -102,6 +156,15 @@ public class Controller implements Initializable{
         startProgressButton.setDisable(false);
         releaseProgressButton.setDisable(false);
         colorSpaces = memoryPane.getChildren();
+
+    }
+
+    public void showErrorInfo(String text) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(Main.stage);
+        alert.setContentText(text);
+        alert.setTitle("error!");
+        alert.show();
     }
 
     public void onOverMemory() {
@@ -116,34 +179,61 @@ public class Controller implements Initializable{
         startProgressButton.setDisable(!false);
         releaseProgressButton.setDisable(!false);
         memoryPane.getChildren().clear();
+        memoryManageAlogorithm = new MemoryManageAlogorithm();
+        refreshTalbe();
     }
 
     public void onAlgorithmSelect() {
-
+        if(firstAdapt.isSelected())
+            algName = MemoryManageAlogorithm.FIRST_FIT;
+        else if(bestAdapt.isSelected())
+            algName = MemoryManageAlogorithm.BEST_FIT;
+        else
+            algName = MemoryManageAlogorithm.WORST_FIT;
     }
 
-    public Node addColorSpace(int y, double percent, String ...texts) {
+    public Node addColorSpace(int start, int length, String ...texts) {
+        Label startAddress = new Label();
+        Label endAddress = new Label();
+        startAddress.setText(start + " K");
+        startAddress.setLayoutX(-100);
+        startAddress.setPrefWidth(95);
+        startAddress.setLayoutY(memoryPane.getPrefHeight() * start / memorySize -10);
+        startAddress.setAlignment(Pos.TOP_RIGHT);
+        endAddress.setText(start + length + " K");
+        endAddress.setLayoutX(-100);
+        endAddress.setPrefWidth(95);
+        endAddress.setLayoutY((start + length) * memoryPane.getPrefHeight() / memorySize -10);
+        endAddress.setAlignment(Pos.TOP_RIGHT);
+        memoryPane.getChildren().add(startAddress);
+        memoryPane.getChildren().add(endAddress);
+        return addColorSpace((double)start / memorySize, (double)length / memorySize, texts);
+    }
+
+    public Node addColorSpace(double yPercent, double lengthPercent, String ...texts) {
         if(colorSpaces == null)
             colorSpaces = memoryPane.getChildren();
         Pane colorSpace = new Pane();
-        colorSpace.setPrefSize(memoryPane.getPrefWidth(), memoryPane.getPrefHeight() * percent);
+        colorSpace.setPrefSize(memoryPane.getPrefWidth(), memoryPane.getPrefHeight() * lengthPercent);
         colorSpace.setLayoutX(0);
-        colorSpace.setLayoutY(y);
+        colorSpace.setLayoutY(memoryPane.getPrefHeight() * yPercent);
         colorSpace.setOpacity(0.8);
         Label label = new Label();
+
+
         String lableText = "";
         for(String text : texts) {
             lableText = lableText + text + "\r\n";
         }
         label.setText(lableText);
-        label.setPrefSize(memoryPane.getPrefWidth(), memoryPane.getPrefHeight() * percent);
+        label.setPrefSize(memoryPane.getPrefWidth(), memoryPane.getPrefHeight() * lengthPercent);
         label.setLayoutX(0);
         label.setLayoutY(0);
         label.setAlignment(Pos.CENTER);
         label.setFont(new Font(15));
         label.setTextFill(Paint.valueOf("#000000"));
         colorSpace.getChildren().add(label);
-        Color color = new Color(percent * 3, 0, 1 - percent * 3, 1);
+        Color color = Color.CYAN;
         System.out.println(getColorString(color));
         colorSpace.setStyle("-fx-background-color:" + getColorString(color));
         colorSpaces.add(colorSpace);

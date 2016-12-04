@@ -16,6 +16,9 @@ public class MemoryManageAlogorithm {
     int maxLength;
     private List<UnAllocatedMemory> unAllocatedMemories = new ArrayList<>();
     private List<AllocatedMemory> allocatedMemories = new ArrayList<>();
+    final static public int FIRST_FIT = 0;
+    final static public int BEST_FIT = 1;
+    final static public int WORST_FIT = 2;
 
 
     public int[] getMemory() {
@@ -49,6 +52,15 @@ public class MemoryManageAlogorithm {
         unAllocatedMemory.setStartAddress(0);
         unAllocatedMemories.add(unAllocatedMemory);
         maxLength = length-1;
+    }
+
+    public boolean selectAlgorithm(int length, String processName, int algName) {
+        switch (algName) {
+            case FIRST_FIT:return firstFitAlgorithm(length, processName);
+            case BEST_FIT:return bestFitAlgorithm(length, processName);
+            case WORST_FIT:return worstFitAlgorithm(length, processName);
+            default:return false;
+        }
     }
 
 
@@ -143,12 +155,12 @@ public class MemoryManageAlogorithm {
         return false;
     }
 
-    public void Recycle(String procressName,String arithmeticName){
+    public void recycle(String procressName, int arithmeticName){
         int flag=0;
         AllocatedMemory allocatedMemory = new AllocatedMemory();
         UnAllocatedMemory unAllocatedMemory=new UnAllocatedMemory();
         for (int i=0;i<allocatedMemories.size();i++) {
-            if (allocatedMemories.get(i).getProcessName() == procressName) {
+            if (allocatedMemories.get(i).getProcessName().equals(procressName)) {
                 allocatedMemory = allocatedMemories.get(i);
                 allocatedMemories.remove(i);
                 break;
@@ -207,7 +219,7 @@ public class MemoryManageAlogorithm {
             });
         }
 
-        if(arithmeticName=="最好"){
+        if(arithmeticName==BEST_FIT){
             Collections.sort(unAllocatedMemories, new Comparator<UnAllocatedMemory>() {
                 @Override
                 public int compare(UnAllocatedMemory o1, UnAllocatedMemory o2) {
@@ -215,7 +227,7 @@ public class MemoryManageAlogorithm {
                 }
             });
         }
-        if(arithmeticName=="最坏"){
+        if(arithmeticName==WORST_FIT){
             Collections.sort(unAllocatedMemories, new Comparator<UnAllocatedMemory>() {
                 @Override
                 public int compare(UnAllocatedMemory o1, UnAllocatedMemory o2) {
@@ -278,8 +290,11 @@ public class MemoryManageAlogorithm {
         }
     }
 
+    public int getMaxLength() {
+        return maxLength;
+    }
 
-
-
-
+    public void setMaxLength(int maxLength) {
+        this.maxLength = maxLength;
+    }
 }

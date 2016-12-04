@@ -24,5 +24,11 @@ public class UnAllocatedMemory {
     }
 
 
-
+    public FreeTableModel getFreeTalbeModel() {
+        FreeTableModel freeTableModel = new FreeTableModel();
+        freeTableModel.setInitialAddress(String.valueOf(startAddress));
+        freeTableModel.setLength(String .valueOf(length));
+        freeTableModel.setStatus("free");
+        return freeTableModel;
+    }
 }
