@@ -2,6 +2,7 @@ package imu.memoryManage.app;
 
 import javafx.scene.Node;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,10 +12,16 @@ import java.util.TimerTask;
 public class Animation{
 
     final static int ANIMATION_STEP = 1;
+    static int memorySize = 0;
+    static int paneHeight = 0;
+    static ArrayList<Node> nodes;
+    static boolean canDo = true;
 
-    public static  void removeColorSpace(int removeLength, Node node) {
+    public static void moveColorSpace(int moveLength, int pos) {
+        Node node = nodes.get(pos);
         Timer timer = new Timer();
-        timer.schedule(new AnimationTimerTask(node, removeLength, timer), 0, 5);
+        timer.schedule(new AnimationTimerTask(node, moveLength * paneHeight / memorySize, timer), 0, 5);
+        canDo = false;
     }
 
     static class AnimationTimerTask extends TimerTask {
@@ -34,8 +41,10 @@ public class Animation{
 
         @Override
         public void run() {
-            if(max == 0)
+            if(max == 0) {
                 timer.cancel();
+                canDo = true;
+            }
             else {
                 node.setLayoutY(node.getLayoutY() + discount);
             }
@@ -43,4 +52,35 @@ public class Animation{
         }
     }
 
+    public static int getMemorySize() {
+        return memorySize;
+    }
+
+    public static void setMemorySize(int memorySize) {
+        Animation.memorySize = memorySize;
+    }
+
+    public static ArrayList<Node> getNodes() {
+        return nodes;
+    }
+
+    public static void setNodes(ArrayList<Node> nodes) {
+        Animation.nodes = nodes;
+    }
+
+    public static int getPaneHeight() {
+        return (int) paneHeight;
+    }
+
+    public static void setPaneHeight(int paneHeight) {
+        Animation.paneHeight = paneHeight;
+    }
+
+    public static boolean isCanDo() {
+        return canDo;
+    }
+
+    public static void setCanDo(boolean canDo) {
+        Animation.canDo = canDo;
+    }
 }

@@ -4,8 +4,6 @@ import imu.memoryManage.algorithm.MemoryManageAlogorithm;
 import imu.memoryManage.model.AllocatedMemory;
 import imu.memoryManage.model.BusyTableModel;
 import imu.memoryManage.model.FreeTableModel;
-import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -85,6 +83,7 @@ public class Controller implements Initializable{
         busyTable.setItems(busyTableModels);
         busyTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         firstAdapt.setSelected(true);
+        Animation.setPaneHeight((int) memoryPane.getHeight());
     }
 
     public void onStartProgress() {
@@ -134,12 +133,14 @@ public class Controller implements Initializable{
             Node node = addColorSpace(allocatedMemory.getStartAddress(), allocatedMemory.getLength(), allocatedMemory.getProcessName() + ":", allocatedMemory.getLength() + "K");
             colorList.add(node);
         }
+        Animation.setNodes(colorList);
     }
 
     public void onStartMemory() {
         try {
             memoryManageAlogorithm.initMemory(Integer.parseInt(initialMemoryText.getText()));
             memorySize = memoryManageAlogorithm.getMaxLength();
+            Animation.memorySize = memorySize;
             refreshTalbe();
         } catch (Exception e) {
             showErrorInfo("初始内存必须是整数");
@@ -219,8 +220,6 @@ public class Controller implements Initializable{
         colorSpace.setLayoutY(memoryPane.getPrefHeight() * yPercent);
         colorSpace.setOpacity(0.8);
         Label label = new Label();
-
-
         String lableText = "";
         for(String text : texts) {
             lableText = lableText + text + "\r\n";
@@ -244,8 +243,6 @@ public class Controller implements Initializable{
 
 
     public void onTest() {
-        Animation.removeColorSpace(200,
-                addColorSpace(100, 0.2, "123\r\n456"));
     }
 
     public static String getColorString(Color color) {
