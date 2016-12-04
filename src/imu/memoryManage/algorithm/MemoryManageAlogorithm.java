@@ -88,7 +88,7 @@ public class MemoryManageAlogorithm {
                 allocatedMemory.setProcessName(processName);
                 allocatedMemories.add(allocatedMemory);
                 sortUnAllocatedMemoriesByStartAddress();
-                Collections.sort(allocatedMemories);
+                sortAllocatedMemoriesByStartAddress();
                 return true;
             }
         }
@@ -109,7 +109,7 @@ public class MemoryManageAlogorithm {
                 allocatedMemory.setLength(length);
                 allocatedMemory.setProcessName(processName);
                 allocatedMemories.add(allocatedMemory);
-                Collections.sort(allocatedMemories);
+                sortAllocatedMemoriesByStartAddress();
                 Collections.sort(unAllocatedMemories, new Comparator<UnAllocatedMemory>() {
                     @Override
                     public int compare(UnAllocatedMemory o1, UnAllocatedMemory o2) {
@@ -136,7 +136,7 @@ public class MemoryManageAlogorithm {
                 allocatedMemory.setLength(length);
                 allocatedMemory.setProcessName(processName);
                 allocatedMemories.add(allocatedMemory);
-                Collections.sort(allocatedMemories);
+                sortAllocatedMemoriesByStartAddress();
                 Collections.sort(unAllocatedMemories, new Comparator<UnAllocatedMemory>() {
                     @Override
                     public int compare(UnAllocatedMemory o1, UnAllocatedMemory o2) {
@@ -241,6 +241,10 @@ public class MemoryManageAlogorithm {
         });
     }
 
+    private void sortAllocatedMemoriesByStartAddress(){
+        Collections.sort(allocatedMemories);
+    }
+
     private int getLastIndex(UnAllocatedMemory unAllocatedMemory){
         for(int i=allocatedMemories.size()-1;i>0;i--){
             if(allocatedMemories.get(i).getLength()+allocatedMemories.get(i).getStartAddress()==
@@ -266,18 +270,30 @@ public class MemoryManageAlogorithm {
                 AllocatedMemory allocatedMemory = allocatedMemories.get(index);
                 if(unAllocatedMemories.get(unAllocatedMemories.size()-2).getStartAddress()+
                         unAllocatedMemories.get(unAllocatedMemories.size()-2).getLength()== allocatedMemory.getStartAddress()) {
+
+                    ProcessMove processMove = new ProcessMove();
+                    processMove.setPosation(index);
+                    processMove.setLength(unAllocatedMemories.get(unAllocatedMemories.size() - 1).getLength());
+                    processMoves.add(processMove);
+
                     unAllocatedMemories.get(unAllocatedMemories.size() - 2).setLength(unAllocatedMemories.get(unAllocatedMemories.size() - 2).getLength() + unAllocatedMemory.getLength());
                     unAllocatedMemories.remove(unAllocatedMemories.size() - 1);
                     allocatedMemory.setStartAddress(unAllocatedMemories.get(unAllocatedMemories.size() - 1).getStartAddress() + unAllocatedMemories.get(unAllocatedMemories.size() - 1).getLength());
                     allocatedMemories.remove(index);
                     allocatedMemories.add(allocatedMemory);
-                    Collections.sort(allocatedMemories);
+                    sortAllocatedMemoriesByStartAddress();
                 }else {
+                    ProcessMove processMove = new ProcessMove();
+                    processMove.setPosation(index);
+                    processMove.setLength(unAllocatedMemories.get(unAllocatedMemories.size() - 1).getLength());
+                    processMoves.add(processMove);
+
                     unAllocatedMemories.get(unAllocatedMemories.size() - 1).setStartAddress(allocatedMemory.getStartAddress());
                     allocatedMemory.setStartAddress(allocatedMemory.getStartAddress()+unAllocatedMemories.get(unAllocatedMemories.size() - 1).getLength());
                     allocatedMemories.remove(index);
                     allocatedMemories.add(allocatedMemory);
-                    Collections.sort(allocatedMemories);
+                    sortAllocatedMemoriesByStartAddress();
+
                 }
             }
             return true;
