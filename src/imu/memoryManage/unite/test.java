@@ -14,10 +14,11 @@ public class test {
         memoryManageAlogorithm.bestFitAlgorithm(30,"cc");
         memoryManageAlogorithm.bestFitAlgorithm(30,"dd");
         memoryManageAlogorithm.bestFitAlgorithm(30,"ee");
-        memoryManageAlogorithm.Recycle("aa","最好");
-        memoryManageAlogorithm.Recycle("cc","最好");
-        memoryManageAlogorithm.Recycle("ee","最好");
-
+        memoryManageAlogorithm.bestFitAlgorithm(50,"ff");
+        memoryManageAlogorithm.Recycle("aa","");
+        memoryManageAlogorithm.Recycle("cc","");
+        memoryManageAlogorithm.Recycle("ee","");
+        memoryManageAlogorithm.Recycle("ff","");
         memoryManageAlogorithm.compact(120);
     }
 }

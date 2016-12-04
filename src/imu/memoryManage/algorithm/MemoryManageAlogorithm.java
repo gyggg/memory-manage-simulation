@@ -54,7 +54,7 @@ public class MemoryManageAlogorithm {
 
     public boolean firstFitAlgorithm(int length,String processName){
         for(int i = 0;i<unAllocatedMemories.size();i++){
-            if(unAllocatedMemories.get(i).getLength()>length){
+            if(unAllocatedMemories.get(i).getLength()>=length){
                 UnAllocatedMemory oldUnAllocatedMemory = unAllocatedMemories.get(i);
                 UnAllocatedMemory newUnAllocatedMeMory = new UnAllocatedMemory();
                 AllocatedMemory allocatedMemory = new AllocatedMemory();
@@ -80,7 +80,7 @@ public class MemoryManageAlogorithm {
 
     public boolean bestFitAlgorithm(int length,String processName){
         for(int i = 0;i<unAllocatedMemories.size();i++) {
-            if (unAllocatedMemories.get(i).getLength() > length) {
+            if (unAllocatedMemories.get(i).getLength() >= length) {
                 UnAllocatedMemory oldUnAllocatedMemory = unAllocatedMemories.get(i);
                 UnAllocatedMemory newUnAllocatedMeMory = new UnAllocatedMemory();
                 AllocatedMemory allocatedMemory = new AllocatedMemory();
@@ -112,7 +112,7 @@ public class MemoryManageAlogorithm {
 
     public boolean worstFitAlgorithm(int length,String processName){
         for(int i = 0;i<unAllocatedMemories.size();i++) {
-            if (unAllocatedMemories.get(i).getLength() > length) {
+            if (unAllocatedMemories.get(i).getLength() >= length) {
                 UnAllocatedMemory oldUnAllocatedMemory = unAllocatedMemories.get(i);
                 UnAllocatedMemory newUnAllocatedMeMory = new UnAllocatedMemory();
                 AllocatedMemory allocatedMemory = new AllocatedMemory();
@@ -273,7 +273,6 @@ public class MemoryManageAlogorithm {
                 }else {
                     allocatedMemories.set(index,allocatedMemory);
                 }
-
             }
             return true;
         }
