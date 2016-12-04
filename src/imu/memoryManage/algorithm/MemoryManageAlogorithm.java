@@ -1,6 +1,7 @@
 package imu.memoryManage.algorithm;
 
 import imu.memoryManage.model.AllocatedMemory;
+import imu.memoryManage.model.ProcessMove;
 import imu.memoryManage.model.UnAllocatedMemory;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class MemoryManageAlogorithm {
     int maxLength;
     private List<UnAllocatedMemory> unAllocatedMemories = new ArrayList<>();
     private List<AllocatedMemory> allocatedMemories = new ArrayList<>();
+    private List<ProcessMove> processMoves = new ArrayList<>();
     final static public int FIRST_FIT = 0;
     final static public int BEST_FIT = 1;
     final static public int WORST_FIT = 2;
@@ -45,6 +47,14 @@ public class MemoryManageAlogorithm {
         this.allocatedMemories = allocatedMemories;
     }
 
+    public List<ProcessMove> getProcessMoves() {
+        return processMoves;
+    }
+
+    public void setProcessMoves(List<ProcessMove> processMoves) {
+        this.processMoves = processMoves;
+    }
+
     public void initMemory(int length){
         Memory = new int [length];
         UnAllocatedMemory unAllocatedMemory = new UnAllocatedMemory();
@@ -63,7 +73,6 @@ public class MemoryManageAlogorithm {
         }
     }
 
-
     public boolean firstFitAlgorithm(int length,String processName){
         for(int i = 0;i<unAllocatedMemories.size();i++){
             if(unAllocatedMemories.get(i).getLength()>=length){
@@ -73,16 +82,12 @@ public class MemoryManageAlogorithm {
                 unAllocatedMemories.remove(i);
                 newUnAllocatedMeMory.setLength((oldUnAllocatedMemory.getLength()-length));
                 newUnAllocatedMeMory.setStartAddress(oldUnAllocatedMemory.getStartAddress()+length);
-                if(unAllocatedMemories.size()==i){
-                    unAllocatedMemories.add(newUnAllocatedMeMory);
-                }else{
-                    unAllocatedMemories.set(i,newUnAllocatedMeMory);
-                }
-
+                unAllocatedMemories.add(newUnAllocatedMeMory);
                 allocatedMemory.setStartAddress(oldUnAllocatedMemory.getStartAddress());
                 allocatedMemory.setLength(length);
                 allocatedMemory.setProcessName(processName);
                 allocatedMemories.add(allocatedMemory);
+                sortUnAllocatedMemoriesByStartAddress();
                 Collections.sort(allocatedMemories);
                 return true;
             }
@@ -99,12 +104,7 @@ public class MemoryManageAlogorithm {
                 unAllocatedMemories.remove(i);
                 newUnAllocatedMeMory.setLength((oldUnAllocatedMemory.getLength()-length));
                 newUnAllocatedMeMory.setStartAddress(oldUnAllocatedMemory.getStartAddress()+length);
-                if(unAllocatedMemories.size()==i){
-                    unAllocatedMemories.add(newUnAllocatedMeMory);
-                }else{
-                    unAllocatedMemories.set(i,newUnAllocatedMeMory);
-                }
-
+                unAllocatedMemories.add(newUnAllocatedMeMory);
                 allocatedMemory.setStartAddress(oldUnAllocatedMemory.getStartAddress());
                 allocatedMemory.setLength(length);
                 allocatedMemory.setProcessName(processName);
@@ -131,12 +131,7 @@ public class MemoryManageAlogorithm {
                 unAllocatedMemories.remove(i);
                 newUnAllocatedMeMory.setLength((oldUnAllocatedMemory.getLength()-length));
                 newUnAllocatedMeMory.setStartAddress(oldUnAllocatedMemory.getStartAddress()+length);
-                if(unAllocatedMemories.size()==i){
-                    unAllocatedMemories.add(newUnAllocatedMeMory);
-                }else{
-                    unAllocatedMemories.set(i,newUnAllocatedMeMory);
-                }
-
+                unAllocatedMemories.add(newUnAllocatedMeMory);
                 allocatedMemory.setStartAddress(oldUnAllocatedMemory.getStartAddress());
                 allocatedMemory.setLength(length);
                 allocatedMemory.setProcessName(processName);
@@ -166,19 +161,7 @@ public class MemoryManageAlogorithm {
                 break;
             }
         }
-        Collections.sort(unAllocatedMemories, new Comparator<UnAllocatedMemory>() {
-            @Override
-            public int compare(UnAllocatedMemory o1, UnAllocatedMemory o2) {
-                    if(o1.getStartAddress()==o2.getStartAddress())
-                        return 0;
-                    else if(o1.getStartAddress()>o2.getStartAddress())
-                        return 1;
-                    else
-                        return -1;
-            }
-        });
-
-
+        sortUnAllocatedMemoriesByStartAddress();
         for (int j = 0; j < unAllocatedMemories.size(); j++) {
             UnAllocatedMemory unAllocatedMemory1 = unAllocatedMemories.get(j);
             if(unAllocatedMemories.size()-1!=j){
@@ -206,17 +189,7 @@ public class MemoryManageAlogorithm {
             unAllocatedMemory.setStartAddress(allocatedMemory.getStartAddress());
             unAllocatedMemory.setLength(allocatedMemory.getLength());
             unAllocatedMemories.add(unAllocatedMemory);
-            Collections.sort(unAllocatedMemories, new Comparator<UnAllocatedMemory>() {
-                @Override
-                public int compare(UnAllocatedMemory o1, UnAllocatedMemory o2) {
-                    if(o1.getStartAddress()==o2.getStartAddress())
-                        return 0;
-                    else if(o1.getStartAddress()>o2.getStartAddress())
-                        return 1;
-                    else
-                        return -1;
-                }
-            });
+            sortUnAllocatedMemoriesByStartAddress();
         }
 
         if(arithmeticName==BEST_FIT){
@@ -238,7 +211,7 @@ public class MemoryManageAlogorithm {
         }
     }
 
-    public int Memorycompare(UnAllocatedMemory o1, UnAllocatedMemory o2)
+    private int Memorycompare(UnAllocatedMemory o1, UnAllocatedMemory o2)
     {
         if(o1.getLength() == o2.getLength()) {
             if(o1.getStartAddress()==o2.getStartAddress())
@@ -252,6 +225,20 @@ public class MemoryManageAlogorithm {
             return 1;
         else
             return -1;
+    }
+
+    private void sortUnAllocatedMemoriesByStartAddress(){
+        Collections.sort(unAllocatedMemories, new Comparator<UnAllocatedMemory>() {
+            @Override
+            public int compare(UnAllocatedMemory o1, UnAllocatedMemory o2) {
+                if(o1.getStartAddress()==o2.getStartAddress())
+                    return 0;
+                else if(o1.getStartAddress()>o2.getStartAddress())
+                    return 1;
+                else
+                    return -1;
+            }
+        });
     }
 
     private int getLastIndex(UnAllocatedMemory unAllocatedMemory){
@@ -272,18 +259,25 @@ public class MemoryManageAlogorithm {
         if(number<length)
             return false;
         else {
+            sortUnAllocatedMemoriesByStartAddress();
             while (unAllocatedMemories.get(unAllocatedMemories.size()-1).getLength()<length) {
                 UnAllocatedMemory unAllocatedMemory = unAllocatedMemories.get(unAllocatedMemories.size()-1);
                 int index = getLastIndex(unAllocatedMemory);
                 AllocatedMemory allocatedMemory = allocatedMemories.get(index);
-                unAllocatedMemories.get(unAllocatedMemories.size()-2).setLength(unAllocatedMemories.get(unAllocatedMemories.size()-2).getLength()+ unAllocatedMemory.getLength());
-                unAllocatedMemories.remove(unAllocatedMemories.size()-1);
-                allocatedMemory.setStartAddress(unAllocatedMemories.get(unAllocatedMemories.size()-1).getStartAddress()+ unAllocatedMemories.get(unAllocatedMemories.size()-1).getLength());
-                allocatedMemories.remove(index);
-                if(index==unAllocatedMemories.size()-1){
+                if(unAllocatedMemories.get(unAllocatedMemories.size()-2).getStartAddress()+
+                        unAllocatedMemories.get(unAllocatedMemories.size()-2).getLength()== allocatedMemory.getStartAddress()) {
+                    unAllocatedMemories.get(unAllocatedMemories.size() - 2).setLength(unAllocatedMemories.get(unAllocatedMemories.size() - 2).getLength() + unAllocatedMemory.getLength());
+                    unAllocatedMemories.remove(unAllocatedMemories.size() - 1);
+                    allocatedMemory.setStartAddress(unAllocatedMemories.get(unAllocatedMemories.size() - 1).getStartAddress() + unAllocatedMemories.get(unAllocatedMemories.size() - 1).getLength());
+                    allocatedMemories.remove(index);
                     allocatedMemories.add(allocatedMemory);
+                    Collections.sort(allocatedMemories);
                 }else {
-                    allocatedMemories.set(index,allocatedMemory);
+                    unAllocatedMemories.get(unAllocatedMemories.size() - 1).setStartAddress(allocatedMemory.getStartAddress());
+                    allocatedMemory.setStartAddress(allocatedMemory.getStartAddress()+unAllocatedMemories.get(unAllocatedMemories.size() - 1).getLength());
+                    allocatedMemories.remove(index);
+                    allocatedMemories.add(allocatedMemory);
+                    Collections.sort(allocatedMemories);
                 }
             }
             return true;
