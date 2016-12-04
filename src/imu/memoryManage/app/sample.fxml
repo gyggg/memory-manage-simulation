@@ -47,6 +47,6 @@
       <RadioButton fx:id="bestAdapt" layoutX="947.0" layoutY="503.0" mnemonicParsing="false" onMouseClicked="#onAlgorithmSelect" text="最佳适应算法" />
       <Button fx:id="overButton" layoutX="1044.0" layoutY="604.0" mnemonicParsing="false" onMouseClicked="#onOverMemory" text="停止" />
       <Label layoutX="1082.0" layoutY="406.0" text="KB" />
-      <Button layoutX="971.0" layoutY="686.0" mnemonicParsing="false" onMouseClicked="#onTest" text="testButton" />
+      <Button layoutX="971.0" layoutY="686.0" mnemonicParsing="false" onMouseClicked="#onTest" text="testButton" visible="false" />
    </children>
 </Pane>

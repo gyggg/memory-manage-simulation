@@ -239,9 +239,6 @@ public class Controller implements Initializable{
         return colorSpace;
     }
 
-
-
-
     public void onTest() {
     }
 

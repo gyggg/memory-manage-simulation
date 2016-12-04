@@ -17,8 +17,8 @@ public class Animation{
     static ArrayList<Node> nodes;
     static boolean canDo = true;
 
-    public static void moveColorSpace(int moveLength, int pos) {
-        Node node = nodes.get(pos);
+    public static void moveColorSpace(int moveLength, int index) {
+        Node node = nodes.get(index);
         Timer timer = new Timer();
         timer.schedule(new AnimationTimerTask(node, moveLength * paneHeight / memorySize, timer), 0, 5);
         canDo = false;
