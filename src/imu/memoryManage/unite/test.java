@@ -8,13 +8,19 @@ import imu.memoryManage.algorithm.MemoryManageAlogorithm;
 public class test {
     public static void main(String[] args) {
         MemoryManageAlogorithm memoryManageAlogorithm = new MemoryManageAlogorithm();
-        memoryManageAlogorithm.initMemory(200);
+        memoryManageAlogorithm.initMemory(300);
         memoryManageAlogorithm.bestFitAlgorithm(30,"aa");
         memoryManageAlogorithm.bestFitAlgorithm(30,"bb");
         memoryManageAlogorithm.bestFitAlgorithm(30,"cc");
         memoryManageAlogorithm.bestFitAlgorithm(30,"dd");
         memoryManageAlogorithm.bestFitAlgorithm(30,"ee");
         memoryManageAlogorithm.bestFitAlgorithm(50,"ff");
-        memoryManageAlogorithm.compact(120);
+        memoryManageAlogorithm.bestFitAlgorithm(30,"gg");
+        memoryManageAlogorithm.bestFitAlgorithm(50,"zz");
+        memoryManageAlogorithm.recycle("ff",100);
+        memoryManageAlogorithm.recycle("cc",100);
+
+        memoryManageAlogorithm.compact(90);
+
     }
 }
