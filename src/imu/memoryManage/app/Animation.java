@@ -17,7 +17,7 @@ import java.util.TimerTask;
  */
 public class Animation{
 
-    final static double ANIMATION_STEP = 1;
+    final static double ANIMATION_STEP = 0.5;
     static int size = 0;
     static int maxSize = 0;
     static Runnable onEnd;
@@ -45,7 +45,7 @@ public class Animation{
     static class AnimationTimerTask extends TimerTask {
         Node node;
         double discount;
-        int max;
+        double max;
         int i = 0;
         List<ProcessMove> processMoveList;
         Runnable onEnd;
