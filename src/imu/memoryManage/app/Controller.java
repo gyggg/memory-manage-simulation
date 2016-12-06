@@ -4,6 +4,7 @@ import imu.memoryManage.algorithm.MemoryManageAlogorithm;
 import imu.memoryManage.model.AllocatedMemory;
 import imu.memoryManage.model.BusyTableModel;
 import imu.memoryManage.model.FreeTableModel;
+import imu.memoryManage.model.ProcessMove;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -51,8 +52,7 @@ public class Controller implements Initializable{
     ToggleGroup algorithmGroup = new ToggleGroup();
     ObservableList<BusyTableModel> busyTableModels = FXCollections.observableArrayList();
     ObservableList<FreeTableModel> freeTableModels = FXCollections.observableArrayList();
-    ObservableList<Node> colorSpaces;
-    ArrayList<Node> colorList = new ArrayList<>();
+    ObservableList<Node> colorSpaces = FXCollections.observableArrayList();
 
     MemoryManageAlogorithm memoryManageAlogorithm = new MemoryManageAlogorithm();
 
@@ -83,7 +83,7 @@ public class Controller implements Initializable{
         busyTable.setItems(busyTableModels);
         busyTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         firstAdapt.setSelected(true);
-        Animation.setPaneHeight((int) memoryPane.getHeight());
+        colorSpaces = FXCollections.observableArrayList();
     }
 
     public void onStartProgress() {
@@ -98,6 +98,22 @@ public class Controller implements Initializable{
         boolean result = memoryManageAlogorithm.selectAlgorithm(needMemory, proName, algName);
         if(result == true) {
             refreshTalbe();
+        }
+        else {
+            result = memoryManageAlogorithm.compact(needMemory);
+            if(result == true) {
+                List<ProcessMove> processMoveList = memoryManageAlogorithm.getProcessMoves();
+                Animation.moveColorSpace(processMoveList,colorSpaces, memoryPane, memorySize, new Runnable() {
+                    @Override
+                    public void run() {
+                        memoryManageAlogorithm.selectAlgorithm(needMemory, proName, algName);
+                        refreshTalbe();
+                    }
+                });
+            }
+            else {
+                showErrorInfo("剩余内存不足，无法分配");
+            }
         }
     }
 
@@ -128,19 +144,18 @@ public class Controller implements Initializable{
             busyTableModels.add(busyTableModel);
         }
         memoryPane.getChildren().clear();
+        colorSpaces = FXCollections.observableArrayList();
         for(int i = 0; i < memoryManageAlogorithm.getAllocatedMemories().size(); i++) {
             AllocatedMemory allocatedMemory = memoryManageAlogorithm.getAllocatedMemories().get(i);
             Node node = addColorSpace(allocatedMemory.getStartAddress(), allocatedMemory.getLength(), allocatedMemory.getProcessName() + ":", allocatedMemory.getLength() + "K");
-            colorList.add(node);
+            colorSpaces.add(node);
         }
-        Animation.setNodes(colorList);
     }
 
     public void onStartMemory() {
         try {
             memoryManageAlogorithm.initMemory(Integer.parseInt(initialMemoryText.getText()));
             memorySize = memoryManageAlogorithm.getMaxLength();
-            Animation.memorySize = memorySize;
             refreshTalbe();
         } catch (Exception e) {
             showErrorInfo("初始内存必须是整数");
@@ -156,8 +171,6 @@ public class Controller implements Initializable{
         needMemoryText.setDisable(false);
         startProgressButton.setDisable(false);
         releaseProgressButton.setDisable(false);
-        colorSpaces = memoryPane.getChildren();
-
     }
 
     public void showErrorInfo(String text) {
@@ -212,10 +225,8 @@ public class Controller implements Initializable{
     }
 
     public Node addColorSpace(double yPercent, double lengthPercent, String ...texts) {
-        if(colorSpaces == null)
-            colorSpaces = memoryPane.getChildren();
         Pane colorSpace = new Pane();
-        colorSpace.setPrefSize(memoryPane.getPrefWidth(), memoryPane.getPrefHeight() * lengthPercent);
+        colorSpace.setPrefSize(memoryPane.getPrefWidth(), memoryPane.getPrefHeight() * lengthPercent - 1);
         colorSpace.setLayoutX(0);
         colorSpace.setLayoutY(memoryPane.getPrefHeight() * yPercent);
         colorSpace.setOpacity(0.8);
@@ -232,10 +243,10 @@ public class Controller implements Initializable{
         label.setFont(new Font(15));
         label.setTextFill(Paint.valueOf("#000000"));
         colorSpace.getChildren().add(label);
-        Color color = Color.CYAN;
-        System.out.println(getColorString(color));
+        Color color = Color.CADETBLUE;
+//        System.out.println(getColorString(color));
         colorSpace.setStyle("-fx-background-color:" + getColorString(color));
-        colorSpaces.add(colorSpace);
+        memoryPane.getChildren().add(colorSpace);
         return colorSpace;
     }
 

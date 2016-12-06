@@ -1,8 +1,14 @@
 package imu.memoryManage.app;
 
+import imu.memoryManage.model.ProcessMove;
+import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,76 +17,64 @@ import java.util.TimerTask;
  */
 public class Animation{
 
-    final static int ANIMATION_STEP = 1;
-    static int memorySize = 0;
-    static int paneHeight = 0;
-    static ArrayList<Node> nodes;
-    static boolean canDo = true;
+    final static double ANIMATION_STEP = 1;
+    static int size = 0;
+    static int maxSize = 0;
+    static Runnable onEnd;
+    static Timer timer;
 
-    public static void moveColorSpace(int moveLength, int index) {
-        Node node = nodes.get(index);
-        Timer timer = new Timer();
-        timer.schedule(new AnimationTimerTask(node, moveLength * paneHeight / memorySize, timer), 0, 5);
-        canDo = false;
+    public static void moveColorSpace(List<ProcessMove> processMoveList, ObservableList<Node> nodes, Pane pane, int memorySize, Runnable onEnd) {
+        timer = new Timer();
+        Animation.size = Animation.maxSize = processMoveList.size();
+        Animation.onEnd = onEnd;
+        for(int i = 0; i < size; i++) {
+            ProcessMove processMove = processMoveList.get(i);
+            Node node = nodes.get(processMove.getPosition());
+            timer.schedule(new AnimationTimerTask(node, processMove.getLength() * (int)pane.getPrefHeight() / memorySize, i), 0, 25);
+        }
+    }
+
+    public static void onEnd() {
+        if(onEnd != null) {
+            Platform.runLater(onEnd);
+        }
+        timer.purge();
+        timer.cancel();
     }
 
     static class AnimationTimerTask extends TimerTask {
         Node node;
-        int discount;
+        double discount;
         int max;
-        Timer timer;
-        public AnimationTimerTask(Node node, int max, Timer timer) {
+        int i = 0;
+        List<ProcessMove> processMoveList;
+        Runnable onEnd;
+        public AnimationTimerTask(Node node, int max, int i) {
             this.node = node;
             this.max = max;
+            this.i = i;
             if(max < 0)
                 this.discount = -ANIMATION_STEP;
             else
                 this.discount = ANIMATION_STEP;
-            this.timer = timer;
         }
 
         @Override
         public void run() {
+            if(maxSize - size != i)
+                return;
             if(max == 0) {
-                timer.cancel();
-                canDo = true;
+                this.cancel();
+                size--;
+                if(size == 0)
+                    onEnd();
             }
             else {
+                //System.out.println("第" + i + "块" + ": y " + node.getLayoutY());
                 node.setLayoutY(node.getLayoutY() + discount);
             }
             max -= discount;
         }
     }
 
-    public static int getMemorySize() {
-        return memorySize;
-    }
-
-    public static void setMemorySize(int memorySize) {
-        Animation.memorySize = memorySize;
-    }
-
-    public static ArrayList<Node> getNodes() {
-        return nodes;
-    }
-
-    public static void setNodes(ArrayList<Node> nodes) {
-        Animation.nodes = nodes;
-    }
-
-    public static int getPaneHeight() {
-        return (int) paneHeight;
-    }
-
-    public static void setPaneHeight(int paneHeight) {
-        Animation.paneHeight = paneHeight;
-    }
-
-    public static boolean isCanDo() {
-        return canDo;
-    }
-
-    public static void setCanDo(boolean canDo) {
-        Animation.canDo = canDo;
-    }
 }

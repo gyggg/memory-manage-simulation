@@ -256,6 +256,7 @@ public class MemoryManageAlogorithm {
     }
 
     public boolean compact(int length){
+        processMoves.clear();
         int number = 0;
         for(int i = 0;i<unAllocatedMemories.size();i++) {
             number = number + unAllocatedMemories.get(i).getLength();
@@ -272,7 +273,7 @@ public class MemoryManageAlogorithm {
                         unAllocatedMemories.get(unAllocatedMemories.size()-2).getLength()== allocatedMemory.getStartAddress()) {
 
                     ProcessMove processMove = new ProcessMove();
-                    processMove.setPosation(index);
+                    processMove.setPosition(index);
                     processMove.setLength(unAllocatedMemories.get(unAllocatedMemories.size() - 1).getLength());
                     processMoves.add(processMove);
 
@@ -284,7 +285,7 @@ public class MemoryManageAlogorithm {
                     sortAllocatedMemoriesByStartAddress();
                 }else {
                     ProcessMove processMove = new ProcessMove();
-                    processMove.setPosation(index);
+                    processMove.setPosition(index);
                     processMove.setLength(unAllocatedMemories.get(unAllocatedMemories.size() - 1).getLength());
                     processMoves.add(processMove);
 

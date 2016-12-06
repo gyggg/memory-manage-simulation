@@ -12,7 +12,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="imu.memoryManage.app.Controller">
    <children>
-      <TableView fx:id="freeTable" layoutX="56.0" layoutY="76.0" prefHeight="200.0" prefWidth="600.0">
+      <TableView fx:id="freeTable" layoutX="56.0" layoutY="76.0" prefHeight="299.0" prefWidth="600.0">
         <columns>
           <TableColumn prefWidth="150.0" text="编号" />
           <TableColumn prefWidth="150.0" text="起始地址" />
@@ -20,7 +20,7 @@
             <TableColumn minWidth="0.0" prefWidth="150.0" text="状态" />
         </columns>
       </TableView>
-      <TableView fx:id="busyTable" layoutX="56.0" layoutY="417.0" prefHeight="200.0" prefWidth="600.0">
+      <TableView fx:id="busyTable" layoutX="56.0" layoutY="417.0" prefHeight="291.0" prefWidth="600.0">
          <columns>
             <TableColumn prefWidth="150.0" text="编号" />
             <TableColumn prefWidth="150.0" text="起始地址" />
@@ -28,8 +28,8 @@
             <TableColumn minWidth="0.0" prefWidth="150.0" text="占用进程名" />
          </columns>
       </TableView>
-      <Label layoutX="319.0" layoutY="300.0" text="空闲分区表" />
-      <Label layoutX="311.0" layoutY="642.0" text="已分配分区表" />
+      <Label layoutX="319.0" layoutY="381.0" text="空闲分区表" />
+      <Label layoutX="304.0" layoutY="716.0" text="已分配分区表" />
       <TextField fx:id="initialMemoryText" layoutX="994.0" layoutY="401.0" prefHeight="30.0" prefWidth="75.0" text="512" />
       <Label layoutX="922.0" layoutY="406.0" text="初始内存" />
       <Button fx:id="startButton" layoutX="927.0" layoutY="604.0" mnemonicParsing="false" onMouseClicked="#onStartMemory" text="启动" />
