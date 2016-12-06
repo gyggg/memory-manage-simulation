@@ -120,14 +120,19 @@ public class Controller implements Initializable{
     public void onReleaseProgress() {
         String proName = progressNameText.getText();
         int needMemory;
+        boolean result;
         try {
             needMemory = Integer.parseInt(needMemoryText.getText());
         } catch(Exception e) {
             showErrorInfo("内存必须是整数");
             return;
         }
-        memoryManageAlogorithm.recycle(proName, algName);
-        refreshTalbe();
+        result = memoryManageAlogorithm.recycle(proName, algName);
+        if(result){
+            refreshTalbe();
+        }else {
+            showErrorInfo("进程名输入错误，无法回收");
+        }
     }
 
     public void refreshTalbe() {
