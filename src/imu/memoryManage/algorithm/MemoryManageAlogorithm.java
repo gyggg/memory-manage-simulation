@@ -150,7 +150,7 @@ public class MemoryManageAlogorithm {
         return false;
     }
 
-    public void recycle(String procressName, int arithmeticName){
+    public boolean recycle(String procressName, int arithmeticName){
         int flag=0;
         AllocatedMemory allocatedMemory = new AllocatedMemory();
         UnAllocatedMemory unAllocatedMemory=new UnAllocatedMemory();
@@ -160,6 +160,9 @@ public class MemoryManageAlogorithm {
                 allocatedMemories.remove(i);
                 break;
             }
+        }
+        if(allocatedMemory.getLength()==0){
+            return false;
         }
         sortUnAllocatedMemoriesByStartAddress();
         for (int j = 0; j < unAllocatedMemories.size(); j++) {
@@ -209,6 +212,7 @@ public class MemoryManageAlogorithm {
             });
             Collections.reverse(unAllocatedMemories);
         }
+        return true;
     }
 
     private int Memorycompare(UnAllocatedMemory o1, UnAllocatedMemory o2)
