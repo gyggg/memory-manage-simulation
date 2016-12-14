@@ -175,6 +175,24 @@ public class MemoryManageAlogorithm {
         return false;
     }
 
+    private int getPrecursor(AllocatedMemory allocatedMemory){
+        for (int i = 0;i<unAllocatedMemories.size();i++){
+            if(unAllocatedMemories.get(i).getStartAddress()+unAllocatedMemories.get(i).getLength()==allocatedMemory.getStartAddress()){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int getNext(AllocatedMemory allocatedMemory){
+        for (int i = 0;i<unAllocatedMemories.size();i++){
+            if(allocatedMemory.getStartAddress()+allocatedMemory.getLength()==unAllocatedMemories.get(i).getStartAddress()){
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public boolean recycle(String procressName, int arithmeticName){
         int flag=0;
         AllocatedMemory allocatedMemory = new AllocatedMemory();
@@ -189,7 +207,6 @@ public class MemoryManageAlogorithm {
         if(allocatedMemory.getLength()==0){
             return false;
         }
-        sortUnAllocatedMemoriesByStartAddress();
         for (int j = 0; j < unAllocatedMemories.size(); j++) {
             UnAllocatedMemory unAllocatedMemory1 = unAllocatedMemories.get(j);
             if(unAllocatedMemories.size()-1!=j){
@@ -212,30 +229,11 @@ public class MemoryManageAlogorithm {
                 break;
             }
         }
-
         if(flag==0){
             unAllocatedMemory.setStartAddress(allocatedMemory.getStartAddress());
             unAllocatedMemory.setLength(allocatedMemory.getLength());
             unAllocatedMemories.add(unAllocatedMemory);
             sortUnAllocatedMemoriesByStartAddress();
-        }
-
-        if(arithmeticName==BEST_FIT){
-            Collections.sort(unAllocatedMemories, new Comparator<UnAllocatedMemory>() {
-                @Override
-                public int compare(UnAllocatedMemory o1, UnAllocatedMemory o2) {
-                   return Memorycompare(o1,o2);
-                }
-            });
-        }
-        if(arithmeticName==WORST_FIT){
-            Collections.sort(unAllocatedMemories, new Comparator<UnAllocatedMemory>() {
-                @Override
-                public int compare(UnAllocatedMemory o1, UnAllocatedMemory o2) {
-                    return Memorycompare(o1,o2);
-                }
-            });
-            Collections.reverse(unAllocatedMemories);
         }
         return true;
     }
