@@ -111,7 +111,8 @@ public class MemoryManageAlogorithm {
             if (unAllocatedMemories.get(i).getLength() >= length) {
                 UnAllocatedMemory oldUnAllocatedMemory = unAllocatedMemories.get(i);
                 AllocatedMemory allocatedMemory = new AllocatedMemory();
-                if(unAllocatedMemories.get(i).getLength()>=length) {
+                unAllocatedMemories.remove(i);
+                if(oldUnAllocatedMemory.getLength()-length>=limit) {
                     UnAllocatedMemory newUnAllocatedMeMory = new UnAllocatedMemory();
                     newUnAllocatedMeMory.setLength((oldUnAllocatedMemory.getLength() - length));
                     newUnAllocatedMeMory.setStartAddress(oldUnAllocatedMemory.getStartAddress() + length);
@@ -143,33 +144,34 @@ public class MemoryManageAlogorithm {
 
     public boolean worstFitAlgorithm(int length,String processName){
         for(int i = 0;i<unAllocatedMemories.size();i++) {
-            UnAllocatedMemory oldUnAllocatedMemory = unAllocatedMemories.get(i);
-            UnAllocatedMemory newUnAllocatedMeMory = new UnAllocatedMemory();
-            AllocatedMemory allocatedMemory = new AllocatedMemory();
             if (unAllocatedMemories.get(i).getLength() >= length) {
-                unAllocatedMemories.remove(i);
-                newUnAllocatedMeMory.setLength((oldUnAllocatedMemory.getLength() - length));
-                newUnAllocatedMeMory.setStartAddress(oldUnAllocatedMemory.getStartAddress() + length);
-                for(int j=unAllocatedMemories.size()-1;j>i;j--) {
-                    if(unAllocatedMemories.get(j).getLength()>newUnAllocatedMeMory.getLength())
-                    {
-                        unAllocatedMemories.add(j+1,newUnAllocatedMeMory);
+                UnAllocatedMemory oldUnAllocatedMemory = unAllocatedMemories.get(i);
+                UnAllocatedMemory newUnAllocatedMeMory = new UnAllocatedMemory();
+                AllocatedMemory allocatedMemory = new AllocatedMemory();
+                if (unAllocatedMemories.get(i).getLength()-limit >= limit) {
+                    unAllocatedMemories.remove(i);
+                    newUnAllocatedMeMory.setLength((oldUnAllocatedMemory.getLength() - length));
+                    newUnAllocatedMeMory.setStartAddress(oldUnAllocatedMemory.getStartAddress() + length);
+                    for (int j = unAllocatedMemories.size() - 1; j > i; j--) {
+                        if (unAllocatedMemories.get(j).getLength() > newUnAllocatedMeMory.getLength()) {
+                            unAllocatedMemories.add(j + 1, newUnAllocatedMeMory);
+                        }
                     }
+                    allocatedMemory.setStartAddress(oldUnAllocatedMemory.getStartAddress());
+                    allocatedMemory.setLength(length);
+                    allocatedMemory.setProcessName(processName);
+                    allocatedMemories.add(allocatedMemory);
+                    sortAllocatedMemoriesByStartAddress();
+                    return true;
+                } else {
+                    unAllocatedMemories.remove(i);
+                    allocatedMemory.setStartAddress(oldUnAllocatedMemory.getStartAddress());
+                    allocatedMemory.setLength(length);
+                    allocatedMemory.setProcessName(processName);
+                    allocatedMemories.add(allocatedMemory);
+                    sortAllocatedMemoriesByStartAddress();
                 }
-                allocatedMemory.setStartAddress(oldUnAllocatedMemory.getStartAddress());
-                allocatedMemory.setLength(length);
-                allocatedMemory.setProcessName(processName);
-                allocatedMemories.add(allocatedMemory);
-                sortAllocatedMemoriesByStartAddress();
-                return true;
-            }else {
-                unAllocatedMemories.remove(i);
-                allocatedMemory.setStartAddress(oldUnAllocatedMemory.getStartAddress());
-                allocatedMemory.setLength(length);
-                allocatedMemory.setProcessName(processName);
-                allocatedMemories.add(allocatedMemory);
-                sortAllocatedMemoriesByStartAddress();
-             }
+            }
         }
         return false;
     }
@@ -356,22 +358,6 @@ public class MemoryManageAlogorithm {
         return false;
     }
 
-
-    private int Memorycompare(UnAllocatedMemory o1, UnAllocatedMemory o2)
-    {
-        if(o1.getLength() == o2.getLength()) {
-            if(o1.getStartAddress()==o2.getStartAddress())
-                return 0;
-            else if(o1.getStartAddress()>o2.getStartAddress())
-                return 1;
-            else
-                return -1;
-        }
-        else if(o1.getLength()>o2.getLength())
-            return 1;
-        else
-            return -1;
-    }
 
     private void sortUnAllocatedMemoriesByStartAddress(){
         Collections.sort(unAllocatedMemories, new Comparator<UnAllocatedMemory>() {
