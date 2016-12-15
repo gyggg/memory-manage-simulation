@@ -193,6 +193,20 @@ public class MemoryManageAlogorithm {
         return -1;
     }
 
+    public boolean bestRecycle(String procressName, int arithmeticName){
+
+
+
+        return true;
+    }
+
+    public boolean worstRecycle(String procressName, int arithmeticName){
+
+
+
+        return true;
+    }
+
     public boolean recycle(String procressName, int arithmeticName){
         int flag=0;
         AllocatedMemory allocatedMemory = new AllocatedMemory();
