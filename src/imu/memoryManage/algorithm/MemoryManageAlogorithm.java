@@ -113,7 +113,6 @@ public class MemoryManageAlogorithm {
                 AllocatedMemory allocatedMemory = new AllocatedMemory();
                 if(unAllocatedMemories.get(i).getLength()>=length) {
                     UnAllocatedMemory newUnAllocatedMeMory = new UnAllocatedMemory();
-
                     newUnAllocatedMeMory.setLength((oldUnAllocatedMemory.getLength() - length));
                     newUnAllocatedMeMory.setStartAddress(oldUnAllocatedMemory.getStartAddress() + length);
                     for(int j = 0 ;j < i;j++){
@@ -240,6 +239,7 @@ public class MemoryManageAlogorithm {
         for(int i=0;i<unAllocatedMemories.size();i++){
             if(unAllocatedMemory.getLength()<=unAllocatedMemories.get(i).getLength()){
                 unAllocatedMemories.add(i,unAllocatedMemory);
+                break;
             }
         }
         return true;
@@ -292,6 +292,7 @@ public class MemoryManageAlogorithm {
         for(int i=0;i<unAllocatedMemories.size();i++) {
             if (unAllocatedMemory.getLength() >= unAllocatedMemories.get(i).getLength()) {
                 unAllocatedMemories.add(i, unAllocatedMemory);
+                break;
             }
         }
         return true;
@@ -340,11 +341,21 @@ public class MemoryManageAlogorithm {
             for (int i=0;i<unAllocatedMemories.size();i++){
                 if(unAllocatedMemories.get(i).getStartAddress()>unAllocatedMemory.getStartAddress()){
                     unAllocatedMemories.add(i,unAllocatedMemory);
+                    break;
                 }
             }
         }
         return true;
     }
+    public boolean recycle(String procressName,int alogorithm){
+        switch (alogorithm){
+            case FIRST_FIT : return firstRecycle(procressName);
+            case BEST_FIT : return bestRecycle(procressName);
+            case WORST_FIT : return firstRecycle(procressName);
+        }
+        return false;
+    }
+
 
     private int Memorycompare(UnAllocatedMemory o1, UnAllocatedMemory o2)
     {
