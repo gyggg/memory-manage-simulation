@@ -193,21 +193,112 @@ public class MemoryManageAlogorithm {
         return -1;
     }
 
-    public boolean bestRecycle(String procressName, int arithmeticName){
-
-
-
+    public boolean bestRecycle(String procressName){
+        int flag=0;
+        AllocatedMemory allocatedMemory = new AllocatedMemory();
+        UnAllocatedMemory unAllocatedMemory=new UnAllocatedMemory();
+        for (int i=0;i<allocatedMemories.size();i++) {
+            if (allocatedMemories.get(i).getProcessName().equals(procressName)) {
+                allocatedMemory = allocatedMemories.get(i);
+                allocatedMemories.remove(i);
+                break;
+            }
+        }
+        if(allocatedMemory.getLength()==0){
+            return false;
+        }
+        int front=getPrecursor(allocatedMemory);
+        int behind=getNext(allocatedMemory);
+        if(front!=-1&&behind!=-1){
+            UnAllocatedMemory unAllocatedMemory1;
+            UnAllocatedMemory unAllocatedMemory2;
+            unAllocatedMemory1=unAllocatedMemories.get(front);
+            unAllocatedMemory2=unAllocatedMemories.get(behind);
+            unAllocatedMemory.setLength(allocatedMemory.getLength()+unAllocatedMemory1.getLength()+unAllocatedMemory2.getLength());
+            unAllocatedMemory.setStartAddress(unAllocatedMemory1.getStartAddress());
+            unAllocatedMemories.remove(front);
+            unAllocatedMemories.remove(behind);
+        }
+        else if(front!=-1&&behind==-1){
+            UnAllocatedMemory unAllocatedMemory1;
+            unAllocatedMemory1=unAllocatedMemories.get(front);
+            unAllocatedMemory.setLength(allocatedMemory.getLength()+unAllocatedMemory1.getLength());
+            unAllocatedMemory.setStartAddress(unAllocatedMemory1.getStartAddress());
+            unAllocatedMemories.remove(front);
+        }
+        else if(front==-1&&behind!=-1){
+            UnAllocatedMemory unAllocatedMemory2;
+            unAllocatedMemory2=unAllocatedMemories.get(behind);
+            unAllocatedMemory.setStartAddress(allocatedMemory.getStartAddress());
+            unAllocatedMemory.setLength(allocatedMemory.getLength()+unAllocatedMemory2.getLength());
+            unAllocatedMemories.remove(behind);
+        }
+        else {
+            unAllocatedMemory.setLength(allocatedMemory.getLength());
+            unAllocatedMemory.setStartAddress(allocatedMemory.getStartAddress());
+        }
+        for(int i=0;i<unAllocatedMemories.size();i++){
+            if(unAllocatedMemory.getLength()<=unAllocatedMemories.get(i).getLength()){
+                unAllocatedMemories.add(i,unAllocatedMemory);
+            }
+        }
         return true;
     }
 
     public boolean worstRecycle(String procressName, int arithmeticName){
-
-
-
+        int flag=0;
+        AllocatedMemory allocatedMemory = new AllocatedMemory();
+        UnAllocatedMemory unAllocatedMemory=new UnAllocatedMemory();
+        for (int i=0;i<allocatedMemories.size();i++) {
+            if (allocatedMemories.get(i).getProcessName().equals(procressName)) {
+                allocatedMemory = allocatedMemories.get(i);
+                allocatedMemories.remove(i);
+                break;
+            }
+        }
+        if(allocatedMemory.getLength()==0){
+            return false;
+        }
+        int front=getPrecursor(allocatedMemory);
+        int behind=getNext(allocatedMemory);
+        if(front!=-1&&behind!=-1){
+            UnAllocatedMemory unAllocatedMemory1;
+            UnAllocatedMemory unAllocatedMemory2;
+            unAllocatedMemory1=unAllocatedMemories.get(front);
+            unAllocatedMemory2=unAllocatedMemories.get(behind);
+            unAllocatedMemory.setLength(allocatedMemory.getLength()+unAllocatedMemory1.getLength()+unAllocatedMemory2.getLength());
+            unAllocatedMemory.setStartAddress(unAllocatedMemory1.getStartAddress());
+            unAllocatedMemories.remove(front);
+            unAllocatedMemories.remove(behind);
+        }
+        else if(front!=-1&&behind==-1){
+            UnAllocatedMemory unAllocatedMemory1;
+            unAllocatedMemory1=unAllocatedMemories.get(front);
+            unAllocatedMemory.setLength(allocatedMemory.getLength()+unAllocatedMemory1.getLength());
+            unAllocatedMemory.setStartAddress(unAllocatedMemory1.getStartAddress());
+            unAllocatedMemories.remove(front);
+        }
+        else if(front==-1&&behind!=-1){
+            UnAllocatedMemory unAllocatedMemory2;
+            unAllocatedMemory2=unAllocatedMemories.get(behind);
+            unAllocatedMemory.setStartAddress(allocatedMemory.getStartAddress());
+            unAllocatedMemory.setLength(allocatedMemory.getLength()+unAllocatedMemory2.getLength());
+            unAllocatedMemories.remove(behind);
+        }
+        else {
+            unAllocatedMemory.setLength(allocatedMemory.getLength());
+            unAllocatedMemory.setStartAddress(allocatedMemory.getStartAddress());
+        }
+        for(int i=0;i<unAllocatedMemories.size();i++) {
+            if (unAllocatedMemory.getLength() >= unAllocatedMemories.get(i).getLength()) {
+                unAllocatedMemories.add(i, unAllocatedMemory);
+            }
+        }
         return true;
     }
 
-    public boolean recycle(String procressName, int arithmeticName){
+
+    public boolean firstRecycle(String procressName){
         int flag=0;
         AllocatedMemory allocatedMemory = new AllocatedMemory();
         UnAllocatedMemory unAllocatedMemory=new UnAllocatedMemory();
@@ -246,8 +337,11 @@ public class MemoryManageAlogorithm {
         if(flag==0){
             unAllocatedMemory.setStartAddress(allocatedMemory.getStartAddress());
             unAllocatedMemory.setLength(allocatedMemory.getLength());
-            unAllocatedMemories.add(unAllocatedMemory);
-            sortUnAllocatedMemoriesByStartAddress();
+            for (int i=0;i<unAllocatedMemories.size();i++){
+                if(unAllocatedMemories.get(i).getStartAddress()>unAllocatedMemory.getStartAddress()){
+                    unAllocatedMemories.add(i,unAllocatedMemory);
+                }
+            }
         }
         return true;
     }
