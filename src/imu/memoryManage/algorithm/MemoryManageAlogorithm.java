@@ -137,7 +137,6 @@ public class MemoryManageAlogorithm {
                         }
                     }
                 }else {
-                    unAllocatedMemories.remove(i);
                     allocatedMemory.setStartAddress(oldUnAllocatedMemory.getStartAddress());
                     allocatedMemory.setLength(length);
                     allocatedMemory.setProcessName(processName);
@@ -170,7 +169,7 @@ public class MemoryManageAlogorithm {
                         unAllocatedMemories.add(newUnAllocatedMeMory);
                         return  true;
                     }
-                    if(unAllocatedMemories.get(unAllocatedMemories.size()-1).getLength()<newUnAllocatedMeMory.getLength()){
+                    if(unAllocatedMemories.get(unAllocatedMemories.size()-1).getLength()>newUnAllocatedMeMory.getLength()){
                         unAllocatedMemories.add(unAllocatedMemories.size(),newUnAllocatedMeMory);
                         return  true;
                     }
@@ -298,8 +297,8 @@ public class MemoryManageAlogorithm {
             unAllocatedMemory2=unAllocatedMemories.get(behind);
             unAllocatedMemory.setLength(allocatedMemory.getLength()+unAllocatedMemory1.getLength()+unAllocatedMemory2.getLength());
             unAllocatedMemory.setStartAddress(unAllocatedMemory1.getStartAddress());
-            unAllocatedMemories.remove(front);
-            unAllocatedMemories.remove(behind);
+            unAllocatedMemories.remove(unAllocatedMemory1);
+            unAllocatedMemories.remove(unAllocatedMemory2);
         }
         else if(front!=-1&&behind==-1){
             UnAllocatedMemory unAllocatedMemory1;
@@ -323,7 +322,7 @@ public class MemoryManageAlogorithm {
             unAllocatedMemories.add(unAllocatedMemory);
             return  true;
         }
-        if(unAllocatedMemories.get(unAllocatedMemories.size()-1).getLength()<unAllocatedMemory.getLength()){
+        if(unAllocatedMemories.get(unAllocatedMemories.size()-1).getLength()>unAllocatedMemory.getLength()){
             unAllocatedMemories.add(unAllocatedMemories.size(),unAllocatedMemory);
             return  true;
         }
