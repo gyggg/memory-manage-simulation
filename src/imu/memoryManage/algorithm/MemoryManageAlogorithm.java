@@ -117,12 +117,14 @@ public class MemoryManageAlogorithm {
                     newUnAllocatedMeMory.setLength((oldUnAllocatedMemory.getLength() - length));
                     newUnAllocatedMeMory.setStartAddress(oldUnAllocatedMemory.getStartAddress() + length);
                     for(int j = 0 ;j < i;j++){
-                        if(unAllocatedMemories.get(j).getLength()>newUnAllocatedMeMory.getLength()){
+                        if(unAllocatedMemories.get(j).getLength()>=newUnAllocatedMeMory.getLength()){
                             unAllocatedMemories.add(j,newUnAllocatedMeMory);
                             break;
                         }
                     }
-                    unAllocatedMemories.add(newUnAllocatedMeMory);
+                    if(unAllocatedMemories.size()==0){
+                        unAllocatedMemories.add(newUnAllocatedMeMory);
+                    }
                     allocatedMemory.setStartAddress(oldUnAllocatedMemory.getStartAddress());
                     allocatedMemory.setLength(length);
                     allocatedMemory.setProcessName(processName);
@@ -156,6 +158,9 @@ public class MemoryManageAlogorithm {
                         if (unAllocatedMemories.get(j).getLength() > newUnAllocatedMeMory.getLength()) {
                             unAllocatedMemories.add(j + 1, newUnAllocatedMeMory);
                         }
+                    }
+                    if(unAllocatedMemories.size()==0){
+                        unAllocatedMemories.add(newUnAllocatedMeMory);
                     }
                     allocatedMemory.setStartAddress(oldUnAllocatedMemory.getStartAddress());
                     allocatedMemory.setLength(length);
@@ -238,8 +243,8 @@ public class MemoryManageAlogorithm {
             unAllocatedMemory.setLength(allocatedMemory.getLength());
             unAllocatedMemory.setStartAddress(allocatedMemory.getStartAddress());
         }
-        for(int i=0;i<unAllocatedMemories.size();i++){
-            if(unAllocatedMemory.getLength()<=unAllocatedMemories.get(i).getLength()){
+        for(int i=unAllocatedMemories.size();i>0;i--){
+            if(unAllocatedMemory.getLength()>=unAllocatedMemories.get(i).getLength()){
                 unAllocatedMemories.add(i,unAllocatedMemory);
                 break;
             }
