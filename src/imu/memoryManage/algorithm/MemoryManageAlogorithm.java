@@ -138,7 +138,7 @@ public class MemoryManageAlogorithm {
                     }
                 }else {
                     allocatedMemory.setStartAddress(oldUnAllocatedMemory.getStartAddress());
-                    allocatedMemory.setLength(length);
+                    allocatedMemory.setLength(oldUnAllocatedMemory.getLength());
                     allocatedMemory.setProcessName(processName);
                     allocatedMemories.add(allocatedMemory);
                     sortAllocatedMemoriesByStartAddress();
@@ -183,7 +183,7 @@ public class MemoryManageAlogorithm {
                 } else {
                     unAllocatedMemories.remove(i);
                     allocatedMemory.setStartAddress(oldUnAllocatedMemory.getStartAddress());
-                    allocatedMemory.setLength(length);
+                    allocatedMemory.setLength(oldUnAllocatedMemory.getLength());
                     allocatedMemory.setProcessName(processName);
                     allocatedMemories.add(allocatedMemory);
                     sortAllocatedMemoriesByStartAddress();
