@@ -155,7 +155,7 @@ public class MemoryManageAlogorithm {
                 UnAllocatedMemory oldUnAllocatedMemory = unAllocatedMemories.get(i);
                 UnAllocatedMemory newUnAllocatedMeMory = new UnAllocatedMemory();
                 AllocatedMemory allocatedMemory = new AllocatedMemory();
-                if (unAllocatedMemories.get(i).getLength()-limit >= limit) {
+                if (unAllocatedMemories.get(i).getLength()-length >= limit) {
                     unAllocatedMemories.remove(i);
                     newUnAllocatedMeMory.setLength((oldUnAllocatedMemory.getLength() - length));
                     newUnAllocatedMeMory.setStartAddress(oldUnAllocatedMemory.getStartAddress() + length);
