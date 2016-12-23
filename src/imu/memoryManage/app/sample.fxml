@@ -38,9 +38,9 @@
       <Line endX="180.0" layoutX="803.0" layoutY="8.0" startX="-180.0" />
       <TextField fx:id="needMemoryText" layoutX="714.0" layoutY="101.0" prefHeight="30.0" prefWidth="171.0" text="100" />
       <Label layoutX="618.0" layoutY="106.0" text="所需内存" />
-      <Button fx:id="startProgressButton" layoutX="902.0" layoutY="37.0" mnemonicParsing="false" onMouseClicked="#onStartProgress" text="启动进程" />
+      <Button fx:id="startProgressButton" layoutX="902.0" layoutY="37.0" mnemonicParsing="false" onMouseClicked="#onStartProgress" text="申请内存" />
       <Line endX="180.0" layoutX="803.0" layoutY="167.0" startX="-180.0" />
-      <Button fx:id="releaseProgressButton" layoutX="902.0" layoutY="116.0" mnemonicParsing="false" onMouseClicked="#onReleaseProgress" text="释放进程" />
+      <Button fx:id="releaseProgressButton" layoutX="902.0" layoutY="116.0" mnemonicParsing="false" onMouseClicked="#onReleaseProgress" text="释放内存" />
       <Pane fx:id="memoryPane" layoutX="650.0" layoutY="176.0" prefHeight="408.0" prefWidth="95.0" style="-fx-background-color: #eeeeee;" />
       <RadioButton fx:id="firstAdapt" layoutX="798.0" layoutY="313.0" mnemonicParsing="false" onMouseClicked="#onAlgorithmSelect" text="首次适应算法" />
       <RadioButton fx:id="baddestAdapt" layoutX="798.0" layoutY="392.0" mnemonicParsing="false" onMouseClicked="#onAlgorithmSelect" text="最坏适应算法" />
